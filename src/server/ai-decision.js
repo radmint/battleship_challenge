@@ -21,22 +21,26 @@ var battleGround = [
 ];
 
 ai = {
+  shipsPlaced: [],
   move: function () {
-    ships.forEach(function (item) {
-      var decision = placement(item);
-      console.log(decision);
-      if (decision !== undefined) {
-        if (decision.alignDecision == "vertical") {
-          for (var index = 0; index < item.squares; index++) {
-            battleGround[decision.row + index][decision.column] = "X"
+    return new Promise(function (resolve, result) {
+      ships.forEach(function (item) {
+        placement(item).then(function (results) {
+          decision = results;
+          if (decision !== undefined) {
+            if (decision.alignDecision == "vertical") {
+              for (var index = 0; index < item.squares; index++) {
+                battleGround[decision.row + index][decision.column] = "X"
+              }
+            } else {
+              for (var subIndex = 0; subIndex < item.squares; subIndex++) {
+                battleGround[decision.row][decision.column + subIndex] = "X"
+              }
+            }
           }
-        } else {
-          for (var subIndex = 0; subIndex < item.squares; subIndex++) {
-            battleGround[decision.row][decision.column + subIndex] = "X"
-          }
-        }
-      }
-      console.log(battleGround);
+        });
+      });
+      resolve(battleGround);
     });
   }
 };
@@ -49,31 +53,68 @@ function columnIndex(column) {
   }
 }
 
-function edgeCheck(index, shipLength, edge) {
+function checkForExistingShip(decision, shipLength) {
+  return new Promise(function (resolve, result) {
+    var passed = true;
+    ai.shipsPlaced.forEach(function (item) {
+      for (var index = 0; index < shipLength; index++) {
+        if (decision.alignDecision == "vertical") {
+          if ((item.row + index) === decision.row) {
+            if (item.column === decision.column) {
+              passed = false;
+            }
+          }
+        } else {
+          if ((item.column + index) === decision.column) {
+            if (item.row === decision.row) {
+              passed = false;
+            }
+          }
+        }
+      }
+    });
+    if (passed) {
+      resolve();
+    } else {
+      reject();
+    }
+  });
+}
 
+function addToShipsArray(decision) {
+  ai.shipsPlaced.push({row: decision.row, column: decision.column});
 }
 
 function placement(item) {
-  var decision = {
-    row: grid.row[Math.floor(Math.random() * grid.row.length)],
-    column: columnIndex(grid.column[Math.floor(Math.random() * grid.column.length)]),
-    alignDecision: alignment[Math.floor(Math.random() * alignment.length)]
-  };
-  var log;
-  if (decision.alignDecision === "vertical") {
-    if ((decision.row + item.squares) > battleGround[0].length) {
-      placement(item);
+  return new Promise(function (resolve, result) {
+    var decision = {
+      row: grid.row[Math.floor(Math.random() * grid.row.length)],
+      column: columnIndex(grid.column[Math.floor(Math.random() * grid.column.length)]),
+      alignDecision: alignment[Math.floor(Math.random() * alignment.length)]
+    };
+    if (decision.alignDecision === "vertical") {
+      if ((decision.row + item.squares) > battleGround[0].length) {
+        placement(item);
+      } else {
+        checkForExistingShip(decision, item.squares).then(function (results) {
+          addToShipsArray(decision);
+        }, function (err) {
+          placement(item);
+        });
+        resolve(decision);
+      }
     } else {
-      log = decision;
+      if ((decision.column + item.squares) > battleGround[0].length) {
+        placement(item);
+      } else {
+        checkForExistingShip(decision, item.squares).then(function (results) {
+          addToShipsArray(decision);
+        }, function (err) {
+          placement(item);
+        });
+        resolve(decision);
+      }
     }
-  } else {
-    if ((decision.column + item.squares) > battleGround[0].length) {
-      placement(item);
-    } else {
-      log = decision;
-    }
-  }
-  console.log(log);
-  return log;
+  });
 }
 module.exports = ai;

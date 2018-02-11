@@ -17,6 +17,9 @@ var questions = [
 ];
 
 inquirer.prompt(questions).then(function (answer) {
-  ai.move();
+  ai.move().then(function(result) {
+    console.log("ships placed", ai.shipsPlaced);
+    console.log(result);
+  });
 })
 ;
