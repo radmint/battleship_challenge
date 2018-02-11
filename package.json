@@ -1,0 +1,31 @@
+{
+  "name": "battleship_challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radmint/battleship_challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/radmint/battleship_challenge/issues"
+  },
+  "homepage": "https://github.com/radmint/battleship_challenge#readme",
+  "dependencies": {
+    "@types/inquirer": "0.0.36",
+    "axios": "^0.17.1",
+    "chalk": "^2.3.0",
+    "cli-table2": "^0.2.0",
+    "commander": "^2.14.1",
+    "express": "^4.16.2",
+    "inquirer": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^9.4.5"
+  }
+}
