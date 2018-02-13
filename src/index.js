@@ -21,14 +21,13 @@ function initialMenu() {
   inquirer.prompt(questions.menu).then(function (answer) {
     if (answer.menuSelect === 'play battleship') {
       if (player.shipsPlaced.length < 5) {
-        placement();
+        // placement();
+        console.log('placement would be run here');
       } else {
         console.log('all ships placed');
       }
     }
-    // ai.move().then(function (result) {
-    //   console.log('final', result);
-    // });
+    ai.move();
   });
 }
 
@@ -39,32 +38,10 @@ function placement(ship) {
     if(ship === undefined) {
       ship = player.ships.shift();
     }
+    validation.allValidate(answer,ship);
     console.log(player.ships);
     console.log('Beginning validation with the', ship.name, 'ship...');
-    var valid = validation.edgeValidate(answer, ship);
-    if (valid === true) {
-      console.log('is valid?', valid);
-      var place = validation.placementValidate(answer, ship);
-      if (place === true) {
-        console.log('can be placed?', place);
-        console.log('adding ship to array');
-        player.addToPlacedShips(answer);
-        grid.determinePosition(ship, answer);
-        console.log(player.battleGround);
-        console.log('ship array is now', player.shipsPlaced);
-        if(player.shipsPlaced.length < 5) {
-          placement();
-        } else {
-          console.log('all ships placed');
-        }
-      } else {
-        console.log('ship overlaps another ship, try again');
-        placement(ship);
-      }
-    } else {
-      console.log('ship too close to edge, try again');
-      placement(ship);
-    }
+
   });
 }
 

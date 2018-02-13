@@ -3,6 +3,7 @@
  */
 var ships = require('./ships');
 var player = require('./player');
+var grid = require('./grid');
 
 var validation = {
   edgeValidate: function (answer, ship) {
@@ -13,12 +14,12 @@ var validation = {
     var y = parseInt(answer.yAxis);
 
     if (answer.alignmentSelect === 'horizontal') {
-      if ((x + shipLength) - 1 > 10) { // minus 1 because count wasn't starting on the index of x
+      if ((x + shipLength) - 1 > grid.size) { // minus 1 because count wasn't starting on the index of x
         console.log('x edge validation failed', x, shipLength);
         result = false;
       }
     } else {
-      if ((y + shipLength) - 1 > 10) {
+      if ((y + shipLength) - 1 > grid.size) {
         console.log('y edge validation failed', y, shipLength);
         result = false;
       }
@@ -56,6 +57,32 @@ var validation = {
       result = true;
     }
     return result;
+  },
+  allValidate: function(answer,ship) {
+    var valid = this.edgeValidate(answer, ship);
+    if (valid === true) {
+      console.log('is valid?', valid);
+      var place = this.placementValidate(answer, ship);
+      if (place === true) {
+        console.log('can be placed?', place);
+        console.log('adding ship to array');
+        player.addToPlacedShips(answer);
+        grid.determinePosition(ship, answer);
+        console.log(player.battleGround);
+        console.log('ship array is now', player.shipsPlaced);
+        if(player.shipsPlaced.length < 5) {
+          placement();
+        } else {
+          console.log('all ships placed');
+        }
+      } else {
+        console.log('ship overlaps another ship, try again');
+        placement(ship);
+      }
+    } else {
+      console.log('ship too close to edge, try again');
+      placement(ship);
+    }
   }
 };
 

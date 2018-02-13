@@ -3,38 +3,45 @@
  */
 var grid = require('./grid');
 var ships = require('./ships');
-
-var alignment = ["horizontal", "vertical"];
-
-var battleGround = [
-  [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-  ["A", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["B", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["C", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["D", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["E", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["F", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["G", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["H", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["I", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["J", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
-];
+var validation = require('./validation');
 
 ai = {
   shipsPlaced: [],
+  ships: ships,
   move: function () {
-    return new Promise(function (resolve, reject) {
-      waitLoop(ships).then(function (result) {
-        console.log('ships placed', result);
-        if (ai.shipsPlaced.length === ships.length) {
-          resolve(battleGround);
-        } else {
-          reject(Err("shoot it broke"));
-        }
-      });
-    });
+    doTheThing();
+    function doTheThing(ship) {
+      if (ship === undefined) {
+        console.log('ship is undefined',this.ships);
+        ship = this.ships.shift();
+      }
+      var decision = this.decision();
+      var aiValidate = allValidate(decision,ship);
+      console.log(aiValidate);
+    }
+  },
+  battleGround: [
+    [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+    ["A", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["B", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["C", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["D", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["E", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["F", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["G", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["H", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["I", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["J", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
+  ],
+  decision: function () {
+    return {
+      row: (grid.row[Math.floor(Math.random() * grid.row.length)]).value,
+      column: (grid.column[Math.floor(Math.random() * grid.column.length)]).value,
+      alignDecision: (grid.alignment[Math.floor(Math.random() * grid.alignment.length)]).toLowerCase()
+    };
   }
 };
+
 
 function waitLoop(ships) {
   return new Promise(function (resolve, reject) {
@@ -86,14 +93,6 @@ function addToMap(firstIndex, secondIndex) {
   battleGround[firstIndex][secondIndex] = "X";
 }
 
-function columnIndex(column) {
-  for (var index = 0; index < battleGround.length; index++) {
-    if (battleGround[index][0] == column) {
-      return index;
-    }
-  }
-}
-
 function checkForExistingShip(decision, shipLength) {
   return new Promise(function (resolve, reject) {
     var index = 0;
@@ -133,11 +132,7 @@ function waitForPlacement(item) {
   return new Promise(function (resolve, reject) {
     placement(item);
     function placement(item) {
-      var decision = {
-        row: grid.row[Math.floor(Math.random() * grid.row.length)],
-        column: columnIndex(grid.column[Math.floor(Math.random() * grid.column.length)]),
-        alignDecision: alignment[Math.floor(Math.random() * alignment.length)]
-      };
+
       if (decision.row + item.squares > 10) {
         placement(item);
       } else if (decision.column + item.squares > 10) {
@@ -147,7 +142,7 @@ function waitForPlacement(item) {
           checkForExistingShip(decision, item.squares).then(function (decision) {
             console.log('compvare check');
             resolve(decision);
-          }).catch(function(err) {
+          }).catch(function (err) {
             placement(item);
           });
         }

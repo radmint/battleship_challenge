@@ -38,7 +38,7 @@ var questions = {
       name: 'alignmentSelect',
       message: 'Align horizontal or vertical?',
       type: 'list',
-      choices: ['Horizontal', 'Vertical'],
+      choices: grid.alignment,
       filter: function (str) {
         return str.toLowerCase();
       }
