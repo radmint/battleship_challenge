@@ -1,3 +1,5 @@
+var player = require('./player');
+
 var grid = {
   row: [
     {name: "1", value: 1, short: "1"},
@@ -22,7 +24,30 @@ var grid = {
     {name: "H", value: 8, short: "H"},
     {name: "I", value: 9, short: "I"},
     {name: "J", value: 10, short: "J"}
-  ]
+  ],
+  determinePosition: function (ship, answer) {
+    console.log('determining position...');
+    var count = 0;
+    var compare = false;
+    for (var subIndex = 0; subIndex < ship.squares; subIndex++) {
+      if (answer.alignmentSelect === "horizontal") {
+        this.addToMap(answer.yAxis, (answer.xAxis + subIndex));
+        count++;
+      } else {
+        this.addToMap((answer.yAxis + subIndex), answer.xAxis);
+        count++;
+      }
+    }
+    if (count === ship.squares) {
+      compare = true;
+    }
+    console.log('position determined', compare);
+    return compare;
+  },
+  addToMap: function (firstIndex, secondIndex) {
+    console.log('adding to map...');
+    player.battleGround[firstIndex][secondIndex] = "X";
+  }
 };
 
 module.exports = grid;

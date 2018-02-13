@@ -20,7 +20,7 @@ initialMenu();
 function initialMenu() {
   inquirer.prompt(questions.menu).then(function (answer) {
     if (answer.menuSelect === 'play battleship') {
-      if (player.shipsPlaced.length <= 5) {
+      if (player.shipsPlaced.length < 5) {
         placement();
       } else {
         console.log('all ships placed');
@@ -49,8 +49,14 @@ function placement(ship) {
         console.log('can be placed?', place);
         console.log('adding ship to array');
         player.addToPlacedShips(answer);
+        grid.determinePosition(ship, answer);
+        console.log(player.battleGround);
         console.log('ship array is now', player.shipsPlaced);
-        placement();
+        if(player.shipsPlaced.length < 5) {
+          placement();
+        } else {
+          console.log('all ships placed');
+        }
       } else {
         console.log('ship overlaps another ship, try again');
         placement(ship);
