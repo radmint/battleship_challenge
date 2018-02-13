@@ -18,11 +18,13 @@
   "homepage": "https://github.com/radmint/battleship_challenge#readme",
   "dependencies": {
     "@types/inquirer": "0.0.36",
+    "async": "^2.6.0",
     "axios": "^0.17.1",
     "chalk": "^2.3.0",
     "cli-table2": "^0.2.0",
     "commander": "^2.14.1",
     "express": "^4.16.2",
+    "figlet": "^1.2.0",
     "inquirer": "^5.1.0"
   },
   "devDependencies": {
