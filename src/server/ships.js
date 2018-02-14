@@ -5,23 +5,23 @@ var ships =
   [
     {
       name: "Carrier",
-      squares: 5
+      length: 5
     },
     {
       name: "Battleship",
-      squares: 4
+      length: 4
     },
     {
       name: "Cruiser",
-      squares: 3
+      length: 3
     },
     {
       name: "Submarine",
-      squares: 3
+      length: 3
     },
     {
       name: "Destroyer",
-      squares: 2
+      length: 2
     }
   ];
 

@@ -2,7 +2,6 @@
  * Created by pbystrom on 2/12/18.
  */
 var grid = require('./grid');
-var ships = require('./ships');
 
 var questions = {
   menu: [
@@ -14,7 +13,8 @@ var questions = {
         {name: 'Play Battleship', value: 'Play Battleship'},
         {name: 'Settings', value: 'Settings'},
         {name: 'Credits', value: 'Credits'},
-        {name: 'Rules', value: 'Rules'}
+        {name: 'Rules', value: 'Rules'},
+        {name: 'Exit', value: 'Exit'}
       ],
       filter: function (str) {
         return str.toLowerCase();
@@ -42,6 +42,40 @@ var questions = {
       filter: function (str) {
         return str.toLowerCase();
       }
+    }
+  ],
+  guess: [
+    {
+      name: 'yAxis',
+      message: 'Select your guess for the Y axis',
+      type: 'list',
+      choices: grid.column
+    },
+    {
+      name: 'xAxis',
+      message: 'Select your guess for the X axis',
+      type: 'list',
+      choices: grid.row
+    }
+  ],
+  settings: [
+    {
+      name: 'aiLog',
+      message: 'Turn AI Logging on or off',
+      type: 'list',
+      choices: [
+        {name: 'On (you cheater)', value: true},
+        {name: 'Off', value: false}
+      ]
+    },
+    {
+      name: 'humanLog',
+      message: 'Turn Human Logging on or off',
+      type: 'list',
+      choices: [
+        {name: 'On', value: true},
+        {name: 'Off', value: false}
+      ]
     }
   ]
 };
