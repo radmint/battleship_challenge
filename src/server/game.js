@@ -1,17 +1,17 @@
 /**
  * Created by pbystrom on 2/13/18.
  */
-var inquirer = require('inquirer');
-var questions = require('./questions');
-var emoji = require('node-emoji');
-var chalk = require('chalk');
-var players = require('./players');
-var figlet = require('figlet');
+let inquirer = require('inquirer');
+let questions = require('./questions');
+let emoji = require('node-emoji');
+let chalk = require('chalk');
+let players = require('./players');
+let figlet = require('figlet');
 
-var game = {
+let game = {
   start: function (who) {
-    var guessResult;
-    var opponent;
+    let guessResult;
+    let opponent;
     if (who === undefined || who.id === players.human.id) {
       inquirer.prompt(questions.guess).then(function (answer) {
         opponent = players.ai;
@@ -25,8 +25,8 @@ var game = {
     }
   },
   existingGuessCheck: function (guess, opponent, player) {
-    var isValid = true;
-    for (var playerIndex = 0; playerIndex < player.existingGuesses.length; playerIndex++) {
+    let isValid = true;
+    for (let playerIndex = 0; playerIndex < player.existingGuesses.length; playerIndex++) {
       if (guess.xAxis == player.existingGuesses[playerIndex].xAxis && guess.yAxis == player.existingGuesses[playerIndex].yAxis) {
         console.log(chalk.red('Already guessed', guess.xAxis, guess.yAxis));
         isValid = false;
@@ -40,8 +40,8 @@ var game = {
     }
   },
   guessCheck: function (guess, opponent, player) {
-    var hit;
-    for (var index = 0; index < opponent.shipCoords.length; index++) {
+    let hit;
+    for (let index = 0; index < opponent.shipCoords.length; index++) {
       if (guess.xAxis == opponent.shipCoords[index].x && guess.yAxis == opponent.shipCoords[index].y) {
         console.log(chalk.red(figlet.textSync('IT\'S A HIT!')));
         opponent.battleGround[guess.yAxis][guess.xAxis] = emoji.get('fire');

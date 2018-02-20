@@ -1,21 +1,19 @@
 /**
  * Created by pbystrom on 2/10/18.
  */
-var emoji = require('node-emoji');
-var ocean = emoji.get('ocean');
-var grid = require('./grid');
-var ships = require('./ships');
+let grid = require('./grid');
 
 /**
  * AI methods and objects
  * @type {{shipsPlaced: Array, shipCoords: Array, addShipCoords: ai.addShipCoords, ships: [*], move: ai.move, addToPlacedShips: ai.addToPlacedShips, getShip: ai.getShip, battleGround: [*], decision: ai.decision}}
  */
-function Player(id, ships, logging) {
+function Player(id, ships, logging, name) {
+  this.name = name;
   this.id = id;
   this.shipsPlaced = [];
   this.shipCoords = [];
   this.addShipCoords = function (answer, ship) {
-    for (var index = 0; index < ship.length; index++) {
+    for (let index = 0; index < ship.length; index++) {
       if (answer.alignmentSelect === 'vertical') {
         this.shipCoords.push({x: answer.xAxis, y: answer.yAxis + index});
       } else {
@@ -25,22 +23,27 @@ function Player(id, ships, logging) {
   };
   this.ships = [
     {
+      id: 0,
       name: "Carrier",
       length: 5
     },
     {
+      id: 1,
       name: "Battleship",
       length: 4
     },
     {
+      id: 2,
       name: "Cruiser",
       length: 3
     },
     {
+      id: 3,
       name: "Submarine",
       length: 3
     },
     {
+      id: 4,
       name: "Destroyer",
       length: 2
     }
@@ -51,19 +54,6 @@ function Player(id, ships, logging) {
   this.addToPlacedShips = function (ship) {
     this.shipsPlaced.push(ship);
   };
-  this.battleGround = [
-    [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-    ["A", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["B", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["C", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["D", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["E", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["F", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["G", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["H", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["I", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean],
-    ["J", ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean, ocean]
-  ];
   this.logging = logging;
   this.existingGuesses = [];
   this.addGuess = function (guess) {
@@ -72,23 +62,23 @@ function Player(id, ships, logging) {
   this.hits = 0;
 }
 
-var players = {
-  ai: new Player(0, ships, false),
-  human: new Player(1, ships, true)
+let players = {
+  computer: new Player(0, this.ships, false, "Computer"),
+  human: new Player(1, this.ships, true, "Human")
 };
 
-players.ai.move = function (validation) {
+players.computer.move = function (validation) {
   makeAiMove();
   function makeAiMove(ship) {
     if (ship === undefined) {
-      ship = players.ai.getShip();
+      ship = players.computer.getShip();
     }
-    var decision = players.ai.decision();
-    validation.allValidate(decision, ship, makeAiMove, players.ai);
+    let decision = players.ai.decision();
+    validation.allValidate(decision, ship, makeAiMove, players.computer);
   }
 };
 
-players.ai.decision = function () {
+players.computer.decision = function () {
   return {
     xAxis: parseInt((grid.row[Math.floor(Math.random() * grid.row.length)]).value),
     yAxis: parseInt((grid.column[Math.floor(Math.random() * grid.column.length)]).value),

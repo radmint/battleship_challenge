@@ -1,6 +1,5 @@
-var emoji = require('node-emoji');
 
-var grid = {
+let grid = {
   size: 10,
   alignment: ['Horizontal', 'Vertical'],
   row: [
@@ -28,9 +27,9 @@ var grid = {
     {name: "J", value: 10, short: "J"}
   ],
   determinePosition: function (ship, answer, who) {
-    var count = 0;
-    var compare = false;
-    for (var subIndex = 0; subIndex < ship.length; subIndex++) {
+    let count = 0;
+    let compare = false;
+    for (let subIndex = 0; subIndex < ship.length; subIndex++) {
       if (answer.alignmentSelect === "horizontal") {
         this.addToMap(answer.yAxis, (answer.xAxis + subIndex), who);
         count++;
@@ -45,7 +44,7 @@ var grid = {
     return compare;
   },
   addToMap: function (firstIndex, secondIndex, who) {
-    who.battleGround[firstIndex][secondIndex] = emoji.get('ship');
+    who.battleGround[firstIndex][secondIndex] = 'X';
   }
 };
 

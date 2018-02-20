@@ -1,9 +1,9 @@
 /**
  * Created by pbystrom on 2/12/18.
  */
-var grid = require('./grid');
+let grid = require('./grid');
 
-var questions = {
+let questions = {
   menu: [
     {
       name: 'menuSelect',

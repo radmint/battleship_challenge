@@ -6,6 +6,7 @@ button {
   border: solid 1px #666;
   border-right: 0;
   padding: 0;
+  cursor: pointer;
 }
 
 button:last-child {
@@ -28,4 +29,28 @@ button:last-child {
   display: inline-block;
   text-align: center;
   vertical-align: middle;
+}
+
+li {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px;
+  display: inline-block;
+}
+
+.board {
+  width:50%;
+  display: inline-block;
+}
+
+.player-name h3 {
+  text-align: center;
+}
+
+.ships-container {
+  margin:auto;
+}
+
+.square-hover {
+  background: red;
 }
